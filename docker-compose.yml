@@ -1,0 +1,49 @@
+version: '3.5'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: proyecto
+      MYSQL_USER: oscar
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./persistent-data:/var/lib/mysql
+    networks:
+      - data
+  
+  angular:
+    image: proyecto/angular:latest
+    container_name: fronted
+    restart: always
+    networks:
+      - data
+    ports:
+      - "8080:4200"
+
+  spring:
+    image: proyecto/spring:latest
+    container_name: spring
+    restart: always
+    networks:
+      - data
+    ports:
+      - "8081:8080"
+
+  node:
+    image: proyecto/node:latest
+    container_name: node
+    restart: always
+    networks:
+      - data
+    ports:
+      - "3001:3001"
+
+
+networks:
+  data:
+    driver: bridge
